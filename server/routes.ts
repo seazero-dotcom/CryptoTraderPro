@@ -245,71 +245,83 @@ export async function registerRoutes(app: Express): Promise<Server> {
   wss.on("connection", (ws) => {
     console.log("WebSocket client connected");
     
-    // Fetch and send real-time data using CoinGecko API
-    const sendRealTimePrices = async () => {
-      try {
-        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,cardano,solana,polkadot&vs_currencies=usd&include_24hr_change=true');
-        const data = await response.json();
-        
-        // Send price updates for each symbol
-        const symbols = [
-          { id: 'bitcoin', symbol: 'BTCUSDT' },
-          { id: 'ethereum', symbol: 'ETHUSDT' },
-          { id: 'binancecoin', symbol: 'BNBUSDT' }
-        ];
-        
-        symbols.forEach(({ id, symbol }) => {
-          if (data[id]) {
-            const price = data[id].usd;
-            const change = data[id].usd_24h_change || 0;
-            const changePercent = change.toFixed(2);
-            
-            ws.send(JSON.stringify({
-              type: "ticker",
-              symbol: symbol,
-              data: {
-                symbol: symbol,
-                lastPrice: price.toString(),
-                priceChangePercent: changePercent,
-                priceChange: (price * change / 100).toFixed(2),
-                prevClosePrice: (price - (price * change / 100)).toFixed(2),
-                openPrice: (price - (price * change / 100)).toFixed(2),
-                highPrice: (price * 1.02).toFixed(2),
-                lowPrice: (price * 0.98).toFixed(2),
-                volume: "50000",
-                quoteVolume: (price * 50000).toString(),
-                openTime: Date.now() - 86400000,
-                closeTime: Date.now(),
-                firstId: 1000000,
-                lastId: 1001000,
-                count: 1000,
-                weightedAvgPrice: price.toString(),
-                lastQty: "1.0",
-                bidPrice: (price * 0.999).toFixed(2),
-                askPrice: (price * 1.001).toFixed(2)
-              }
-            }));
-          }
-        });
-      } catch (error) {
-        console.error("Failed to fetch real-time prices:", error);
-      }
-    };
-
-    // Send initial data
-    sendRealTimePrices();
+    // Connect to Binance WebSocket streams directly
+    const WebSocket = require('ws');
+    const binanceWsStreams: WebSocket[] = [];
     
-    // Update every 10 seconds (CoinGecko API rate limit)
-    const interval = setInterval(sendRealTimePrices, 10000);
+    const symbols = ['btcusdt', 'ethusdt', 'bnbusdt'];
+    
+    symbols.forEach(symbol => {
+      const binanceWs = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol}@ticker`);
+      binanceWsStreams.push(binanceWs);
+      
+      binanceWs.on('open', () => {
+        console.log(`Connected to Binance WebSocket for ${symbol.toUpperCase()}`);
+      });
+      
+      binanceWs.on('message', (data: Buffer) => {
+        try {
+          const ticker = JSON.parse(data.toString());
+          
+          // Convert Binance ticker to our format
+          const formattedData = {
+            type: "ticker",
+            symbol: ticker.s, // Symbol like BTCUSDT
+            data: {
+              symbol: ticker.s,
+              lastPrice: ticker.c, // Current close price
+              priceChangePercent: ticker.P, // Price change percent
+              priceChange: ticker.p, // Price change
+              prevClosePrice: ticker.x, // Previous day close price
+              openPrice: ticker.o, // Open price
+              highPrice: ticker.h, // High price
+              lowPrice: ticker.l, // Low price
+              volume: ticker.v, // Volume
+              quoteVolume: ticker.q, // Quote volume
+              openTime: ticker.O, // Statistics open time
+              closeTime: ticker.C, // Statistics close time
+              firstId: ticker.F, // First trade id
+              lastId: ticker.L, // Last trade id
+              count: ticker.n, // Trade count
+              weightedAvgPrice: ticker.w, // Weighted average price
+              lastQty: ticker.Q, // Last quantity
+              bidPrice: ticker.b, // Best bid price
+              askPrice: ticker.a // Best ask price
+            }
+          };
+          
+          console.log(`Received real-time data for ${ticker.s}: $${ticker.c}`);
+          ws.send(JSON.stringify(formattedData));
+        } catch (error) {
+          console.error('Error parsing Binance WebSocket data:', error);
+        }
+      });
+      
+      binanceWs.on('error', (error: any) => {
+        console.error(`Binance WebSocket error for ${symbol}:`, error);
+      });
+      
+      binanceWs.on('close', () => {
+        console.log(`Binance WebSocket closed for ${symbol}`);
+      });
+    });
 
     ws.on("close", () => {
-      console.log("WebSocket client disconnected");
-      clearInterval(interval);
+      console.log("Client WebSocket disconnected, closing Binance connections");
+      binanceWsStreams.forEach(binanceWs => {
+        if (binanceWs.readyState === WebSocket.OPEN) {
+          binanceWs.close();
+        }
+      });
     });
 
     ws.on("error", (error) => {
-      console.error("WebSocket error:", error);
-      clearInterval(interval);
+      console.error("Client WebSocket error:", error);
+      binanceWsStreams.forEach(binanceWs => {
+        if (binanceWs.readyState === WebSocket.OPEN) {
+          binanceWs.close();
+        }
+      });
     });
   });
 
