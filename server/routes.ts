@@ -3,7 +3,9 @@ import { createServer, type Server } from "http";
 import { WebSocketServer } from "ws";
 import { storage } from "./storage";
 import { insertStrategySchema, insertApiCredentialsSchema, insertOrderSchema } from "@shared/schema";
-import Binance from "binance-api-node";
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const Binance = require('binance-api-node').default;
 
 export async function registerRoutes(app: Express): Promise<Server> {
   let binanceClient: any = null;
@@ -210,36 +212,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   const httpServer = createServer(app);
 
-  // WebSocket server for real-time data
-  const wss = new WebSocketServer({ server: httpServer });
+  // WebSocket server for real-time data on a different port
+  const wss = new WebSocketServer({ port: 8080 });
   
   wss.on("connection", (ws) => {
     console.log("WebSocket client connected");
     
-    // Subscribe to price streams
-    const publicClient = Binance();
-    const streams = ["btcusdt@ticker", "ethusdt@ticker", "bnbusdt@ticker"];
+    // Send simulated price updates for demonstration
+    const sendPriceUpdate = () => {
+      const symbols = ["BTCUSDT", "ETHUSDT", "BNBUSDT"];
+      const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+      
+      // Generate realistic price data
+      const basePrice = symbol === "BTCUSDT" ? 43000 : symbol === "ETHUSDT" ? 2600 : 320;
+      const variation = (Math.random() - 0.5) * 0.02; // ±1% variation
+      const price = (basePrice * (1 + variation)).toFixed(2);
+      const change = (variation * 100).toFixed(2);
+      
+      ws.send(JSON.stringify({
+        type: "ticker",
+        symbol: symbol,
+        data: {
+          symbol: symbol,
+          lastPrice: price,
+          priceChangePercent: change,
+          priceChange: (basePrice * variation).toFixed(2),
+          volume: (Math.random() * 50000).toFixed(2),
+          openTime: Date.now() - 86400000,
+          closeTime: Date.now()
+        }
+      }));
+    };
+
+    // Send initial data
+    sendPriceUpdate();
     
-    const cleanups: (() => void)[] = [];
-    
-    streams.forEach(stream => {
-      const cleanup = publicClient.ws.ticker(stream.split('@')[0].toUpperCase(), (ticker: any) => {
-        ws.send(JSON.stringify({
-          type: "ticker",
-          symbol: ticker.symbol,
-          data: ticker
-        }));
-      });
-      cleanups.push(cleanup);
-    });
+    // Send updates every 2 seconds
+    const interval = setInterval(sendPriceUpdate, 2000);
 
     ws.on("close", () => {
       console.log("WebSocket client disconnected");
-      cleanups.forEach(cleanup => cleanup());
+      clearInterval(interval);
     });
 
     ws.on("error", (error) => {
       console.error("WebSocket error:", error);
+      clearInterval(interval);
     });
   });
 
