@@ -190,9 +190,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Market data
   app.get("/api/prices", async (req, res) => {
     try {
-      // Use a default client for public market data
-      const publicClient = Binance();
-      const prices = await publicClient.prices();
+      // Use authenticated client for market data
+      const authenticatedClient = Binance({
+        apiKey: process.env.BINANCE_API_KEY,
+        apiSecret: process.env.BINANCE_API_SECRET,
+      });
+      const prices = await authenticatedClient.prices();
       res.json(prices);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
@@ -202,8 +205,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/ticker/:symbol", async (req, res) => {
     try {
       const symbol = req.params.symbol;
-      const publicClient = Binance();
-      const ticker = await publicClient.dailyStats({ symbol });
+      const authenticatedClient = Binance({
+        apiKey: process.env.BINANCE_API_KEY,
+        apiSecret: process.env.BINANCE_API_SECRET,
+      });
+      const ticker = await authenticatedClient.dailyStats({ symbol });
       res.json(ticker);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
@@ -218,46 +224,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
   wss.on("connection", (ws) => {
     console.log("WebSocket client connected");
     
-    // Send simulated price updates for demonstration
-    const sendPriceUpdate = () => {
-      const symbols = ["BTCUSDT", "ETHUSDT", "BNBUSDT"];
-      const symbol = symbols[Math.floor(Math.random() * symbols.length)];
-      
-      // Generate realistic price data
-      const basePrice = symbol === "BTCUSDT" ? 43000 : symbol === "ETHUSDT" ? 2600 : 320;
-      const variation = (Math.random() - 0.5) * 0.02; // ±1% variation
-      const price = (basePrice * (1 + variation)).toFixed(2);
-      const change = (variation * 100).toFixed(2);
-      
-      ws.send(JSON.stringify({
-        type: "ticker",
-        symbol: symbol,
-        data: {
-          symbol: symbol,
-          lastPrice: price,
-          priceChangePercent: change,
-          priceChange: (basePrice * variation).toFixed(2),
-          volume: (Math.random() * 50000).toFixed(2),
-          openTime: Date.now() - 86400000,
-          closeTime: Date.now()
-        }
-      }));
-    };
-
-    // Send initial data
-    sendPriceUpdate();
+    // Subscribe to real Binance price streams
+    const authenticatedClient = Binance({
+      apiKey: process.env.BINANCE_API_KEY,
+      apiSecret: process.env.BINANCE_API_SECRET,
+    });
     
-    // Send updates every 2 seconds
-    const interval = setInterval(sendPriceUpdate, 2000);
+    const streams = ["BTCUSDT", "ETHUSDT", "BNBUSDT"];
+    const cleanups: (() => void)[] = [];
+    
+    streams.forEach(symbol => {
+      try {
+        const cleanup = authenticatedClient.ws.ticker(symbol, (ticker: any) => {
+          ws.send(JSON.stringify({
+            type: "ticker",
+            symbol: ticker.symbol,
+            data: ticker
+          }));
+        });
+        cleanups.push(cleanup);
+      } catch (error) {
+        console.error(`Failed to subscribe to ${symbol}:`, error);
+      }
+    });
 
     ws.on("close", () => {
       console.log("WebSocket client disconnected");
-      clearInterval(interval);
+      cleanups.forEach(cleanup => cleanup());
     });
 
     ws.on("error", (error) => {
       console.error("WebSocket error:", error);
-      clearInterval(interval);
+      cleanups.forEach(cleanup => cleanup());
     });
   });
 
