@@ -60,15 +60,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/credentials/test", async (req, res) => {
     try {
       const { apiKey, apiSecret } = req.body;
+      console.log("Testing API credentials...");
+      console.log("API Key provided:", apiKey ? "***PROVIDED***" : "NO_KEY");
+      console.log("API Secret provided:", apiSecret ? "***PROVIDED***" : "NO_SECRET");
+      
       const testClient = Binance({
         apiKey,
         apiSecret,
       });
       
-      await testClient.accountInfo();
-      res.json({ success: true, message: "Credentials are valid" });
+      console.log("Attempting to call Binance accountInfo...");
+      const accountInfo = await testClient.accountInfo();
+      console.log("Binance API test successful");
+      
+      res.json({ success: true, message: "API 연결이 성공했습니다. 계정 정보를 확인했습니다." });
     } catch (error: any) {
-      res.status(400).json({ success: false, message: error.message });
+      console.error("Binance API test failed:");
+      console.error("Error message:", error.message);
+      console.error("Error details:", error);
+      
+      // Provide more specific error messages
+      let errorMessage = error.message;
+      if (error.message?.includes("restricted location")) {
+        errorMessage = "지역 제한으로 인해 바이낸스 API에 접근할 수 없습니다. API 키는 유효하지만 서버 위치에서 접근이 제한됩니다.";
+      } else if (error.message?.includes("Invalid API-key")) {
+        errorMessage = "잘못된 API 키입니다. 바이낸스에서 생성한 올바른 API 키를 입력해주세요.";
+      } else if (error.message?.includes("Invalid signature")) {
+        errorMessage = "잘못된 API Secret입니다. 올바른 Secret 키를 입력해주세요.";
+      } else if (error.message?.includes("IP not allowed")) {
+        errorMessage = "IP 주소 제한이 설정되어 있습니다. 바이낸스 API 설정에서 IP 제한을 해제하거나 현재 서버 IP를 허용 목록에 추가해주세요.";
+      }
+      
+      res.status(400).json({ 
+        success: false, 
+        message: errorMessage,
+        originalError: error.message 
+      });
     }
   });
 

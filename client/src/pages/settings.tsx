@@ -116,7 +116,15 @@ export default function Settings() {
             <Alert className="mt-4">
               <AlertTriangle className="h-4 w-4" />
               <AlertDescription>
-                API 키를 설정하여 실제 거래 데이터를 확인하세요. 바이낸스 계정의 API 관리에서 "읽기 전용" 권한으로 키를 생성할 수 있습니다.
+                <div className="space-y-2">
+                  <p><strong>API 키 설정 안내:</strong></p>
+                  <ul className="list-disc list-inside space-y-1 text-sm">
+                    <li>바이낸스 계정의 API 관리에서 "읽기 전용" 권한으로 키를 생성하세요</li>
+                    <li>IP 제한을 비활성화하거나 모든 IP를 허용으로 설정하세요</li>
+                    <li>현재 서버는 지역 제한으로 인해 바이낸스 글로벌 API 접근이 제한될 수 있습니다</li>
+                    <li>Test Connection 실패 시에도 키를 저장하면 앱 내에서 시세 확인은 가능합니다</li>
+                  </ul>
+                </div>
               </AlertDescription>
             </Alert>
           </CardHeader>
