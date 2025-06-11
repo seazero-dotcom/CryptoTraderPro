@@ -30,16 +30,16 @@ export default function Dashboard() {
 
   const isApiKeyMissing = portfolioError && portfolioError.message?.includes("API credentials not configured");
 
-  const totalBalance = portfolio?.reduce((acc: number, item: any) => {
+  const totalBalance = portfolio && Array.isArray(portfolio) ? portfolio.reduce((acc: number, item: any) => {
     return acc + (parseFloat(item.free) * (prices.get(item.symbol + "USDT")?.lastPrice ? parseFloat(prices.get(item.symbol + "USDT")!.lastPrice) : 0));
-  }, 0) || 12486.23;
+  }, 0) : 12486.23;
 
-  const activeStrategies = strategies?.filter((s: any) => s.isActive).length || 0;
-  const todayOrders = orders?.filter((o: any) => {
+  const activeStrategies = strategies && Array.isArray(strategies) ? strategies.filter((s: any) => s.isActive).length : 0;
+  const todayOrders = orders && Array.isArray(orders) ? orders.filter((o: any) => {
     const today = new Date();
     const orderDate = new Date(o.createdAt);
     return today.toDateString() === orderDate.toDateString();
-  }).length || 0;
+  }).length : 0;
 
   return (
     <div className="pb-16 md:pb-0 md:ml-64">
@@ -168,7 +168,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent className="p-0">
             <div className="divide-y divide-border">
-              {orders?.slice(0, 3).map((order: any, index: number) => (
+              {orders && Array.isArray(orders) ? orders.slice(0, 3).map((order: any, index: number) => (
                 <div key={order.id || index} className="p-4 md:p-6 hover:bg-muted/50 transition-colors">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
@@ -198,7 +198,7 @@ export default function Dashboard() {
                     </div>
                   </div>
                 </div>
-              )) || (
+              )) : (
                 // Empty state when no orders
                 <div className="p-6 text-center">
                   <Activity className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
