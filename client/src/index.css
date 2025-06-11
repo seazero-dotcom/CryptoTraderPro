@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(222, 84%, 5%);
+  --foreground: hsl(210, 40%, 98%);
+  --card: hsl(222, 84%, 8%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --popover: hsl(222, 84%, 8%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --primary: hsl(210, 40%, 20%);
+  --primary-foreground: hsl(222, 84%, 5%);
+  --secondary: hsl(217, 32%, 17%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --muted: hsl(217, 32%, 17%);
+  --muted-foreground: hsl(215, 20%, 65%);
+  --accent: hsl(217, 91%, 60%);
+  --accent-foreground: hsl(222, 84%, 5%);
+  --destructive: hsl(0, 62%, 50%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --border: hsl(217, 32%, 17%);
+  --input: hsl(217, 32%, 17%);
+  --ring: hsl(224, 71%, 4%);
+  --chart-1: hsl(220, 70%, 50%);
+  --chart-2: hsl(160, 60%, 45%);
+  --chart-3: hsl(30, 80%, 55%);
+  --chart-4: hsl(280, 65%, 60%);
+  --chart-5: hsl(340, 75%, 55%);
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: hsl(222, 84%, 5%);
+  --foreground: hsl(210, 40%, 98%);
+  --card: hsl(222, 84%, 8%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --popover: hsl(222, 84%, 8%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --primary: hsl(210, 40%, 20%);
+  --primary-foreground: hsl(222, 84%, 5%);
+  --secondary: hsl(217, 32%, 17%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --muted: hsl(217, 32%, 17%);
+  --muted-foreground: hsl(215, 20%, 65%);
+  --accent: hsl(217, 91%, 60%);
+  --accent-foreground: hsl(222, 84%, 5%);
+  --destructive: hsl(0, 62%, 50%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --border: hsl(217, 32%, 17%);
+  --input: hsl(217, 32%, 17%);
+  --ring: hsl(224, 71%, 4%);
+  --chart-1: hsl(220, 70%, 50%);
+  --chart-2: hsl(160, 60%, 45%);
+  --chart-3: hsl(30, 80%, 55%);
+  --chart-4: hsl(280, 65%, 60%);
+  --chart-5: hsl(340, 75%, 55%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+/* Custom scrollbar styles */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Price change colors */
+.price-up {
+  @apply text-green-500;
+}
+
+.price-down {
+  @apply text-red-500;
+}

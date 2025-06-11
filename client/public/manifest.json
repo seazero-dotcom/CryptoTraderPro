@@ -1,0 +1,32 @@
+{
+  "name": "Binance Trader",
+  "short_name": "BinanceTrader",
+  "description": "Professional cryptocurrency trading PWA with automated strategies",
+  "theme_color": "#1E293B",
+  "background_color": "#0F172A",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiBmaWxsPSIjMUUyOTNCIi8+CjxwYXRoIGQ9Ik05NiA0OEw2MCA4NEw5NiAxMjBMMTMyIDg0TDk2IDQ4WiIgZmlsbD0iIzNBODJGNiIvPgo8cGF0aCBkPSJNNjAgMTA4TDI0IDE0NEw2MCA4MEw5NiAxMTZMNjAgMTA4WiIgZmlsbD0iIzNBODJGNiIvPgo8cGF0aCBkPSJNMTMyIDEwOEwxNjggMTQ0TDEzMiA4MEw5NiAxMTZMMTMyIDEwOFoiIGZpbGw9IiMzQTgyRjYiLz4KPHN2Zz4K",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiBmaWxsPSIjMUUyOTNCIi8+CjxwYXRoIGQ9Ik0yNTYgMTI4TDE2MCAyMjRMMjU2IDMyMEwzNTIgMjI0TDI1NiAxMjhaIiBmaWxsPSIjM0E4MkY2Ii8+CjxwYXRoIGQ9Ik0xNjAgMjg4TDY0IDM4NEwxNjAgMjE2TDI1NiAzMTJMMTYwIDI4OFoiIGZpbGw9IiMzQTgyRjYiLz4KPHBhdGggZD0iTTM1MiAyODhMNDQ4IDM4NEwzNTIgMjE2TDI1NiAzMTJMMzUyIDI4OFoiIGZpbGw9IiMzQTgyRjYiLz4KPHN2Zz4K",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["finance", "productivity"],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjU2OCIgdmlld0JveD0iMCAwIDMyMCA1NjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMjAiIGhlaWdodD0iNTY4IiBmaWxsPSIjMEYxNzJBIi8+CjxyZWN0IHg9IjIwIiB5PSI2MCIgd2lkdGg9IjI4MCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiMxRTI5M0IiIHJ4PSI4Ii8+Cjx0ZXh0IHg9IjMwIiB5PSI5MCIgZmlsbD0iI0Y4RkFGQyIgZm9udC1zaXplPSIyMCIgZm9udC13ZWlnaHQ9ImJvbGQiPkJpbmFuY2UgVHJhZGVyPC90ZXh0Pgo8L3N2Zz4K",
+      "sizes": "320x568",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    }
+  ]
+}
