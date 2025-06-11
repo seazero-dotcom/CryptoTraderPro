@@ -16,7 +16,7 @@ export default function Portfolio() {
   });
 
   const calculatePortfolioValue = () => {
-    if (!portfolio) return 0;
+    if (!portfolio || !Array.isArray(portfolio)) return 0;
     return portfolio.reduce((total: number, holding: any) => {
       const price = prices.get(holding.symbol + "USDT");
       const currentPrice = price ? parseFloat(price.lastPrice) : 0;
@@ -92,7 +92,7 @@ export default function Portfolio() {
                   </div>
                 ))}
               </div>
-            ) : portfolio && portfolio.length > 0 ? (
+            ) : portfolio && Array.isArray(portfolio) && portfolio.length > 0 ? (
               <div className="space-y-4">
                 {portfolio.map((holding: any, index: number) => {
                   const price = prices.get(holding.symbol + "USDT");
@@ -138,8 +138,14 @@ export default function Portfolio() {
             ) : (
               <div className="text-center py-8">
                 <Wallet className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">No holdings found</p>
-                <p className="text-sm text-muted-foreground">Start trading to see your portfolio here</p>
+                <p className="text-muted-foreground mb-2">API 키 설정이 필요합니다</p>
+                <p className="text-sm text-muted-foreground mb-4">포트폴리오 데이터를 확인하려면 설정에서 바이낸스 API 키를 추가해주세요</p>
+                <a 
+                  href="/settings" 
+                  className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+                >
+                  설정으로 이동
+                </a>
               </div>
             )}
           </CardContent>
@@ -151,7 +157,7 @@ export default function Portfolio() {
             <CardTitle>Recent Orders</CardTitle>
           </CardHeader>
           <CardContent>
-            {orders && orders.length > 0 ? (
+            {orders && Array.isArray(orders) && orders.length > 0 ? (
               <div className="space-y-4">
                 {orders.slice(0, 10).map((order: any, index: number) => (
                   <div key={order.id || index} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">

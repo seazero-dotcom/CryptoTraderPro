@@ -113,6 +113,12 @@ export default function Settings() {
         <Card className="bg-card border-border">
           <CardHeader>
             <CardTitle>Binance API Configuration</CardTitle>
+            <Alert className="mt-4">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertDescription>
+                API 키를 설정하여 실제 거래 데이터를 확인하세요. 바이낸스 계정의 API 관리에서 "읽기 전용" 권한으로 키를 생성할 수 있습니다.
+              </AlertDescription>
+            </Alert>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>

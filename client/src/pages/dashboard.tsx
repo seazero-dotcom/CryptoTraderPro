@@ -3,8 +3,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PriceCard } from "@/components/price-card";
 import { useWebSocket } from "@/hooks/use-websocket";
-import { Plus, Wallet, TrendingUp, Bot, ArrowUpDown, ArrowUp, ArrowDown, Activity } from "lucide-react";
+import { Plus, Wallet, TrendingUp, Bot, ArrowUpDown, ArrowUp, ArrowDown, Activity, AlertTriangle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const coinData = [
   { symbol: "BTCUSDT", name: "Bitcoin", icon: "₿", iconColor: "bg-orange-500" },
@@ -15,7 +16,7 @@ const coinData = [
 export default function Dashboard() {
   const { prices } = useWebSocket();
 
-  const { data: portfolio } = useQuery({
+  const { data: portfolio, error: portfolioError } = useQuery({
     queryKey: ["/api/portfolio/1"],
   });
 
@@ -26,6 +27,8 @@ export default function Dashboard() {
   const { data: orders } = useQuery({
     queryKey: ["/api/orders/1"],
   });
+
+  const isApiKeyMissing = portfolioError && portfolioError.message?.includes("API credentials not configured");
 
   const totalBalance = portfolio?.reduce((acc: number, item: any) => {
     return acc + (parseFloat(item.free) * (prices.get(item.symbol + "USDT")?.lastPrice ? parseFloat(prices.get(item.symbol + "USDT")!.lastPrice) : 0));
@@ -57,6 +60,19 @@ export default function Dashboard() {
       </header>
 
       <div className="p-4 md:p-6 space-y-6">
+        {/* API Key Warning */}
+        {isApiKeyMissing && (
+          <Alert className="border-orange-500 bg-orange-50 dark:bg-orange-950">
+            <AlertTriangle className="h-4 w-4 text-orange-600" />
+            <AlertDescription className="text-orange-700 dark:text-orange-300">
+              <span className="font-medium">API 키 설정이 필요합니다.</span> 설정에서 바이낸스 API 키를 추가하여 실제 포트폴리오 데이터를 확인하세요.{" "}
+              <a href="/settings" className="underline hover:no-underline">
+                설정으로 이동
+              </a>
+            </AlertDescription>
+          </Alert>
+        )}
+
         {/* Quick Stats Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Card className="bg-card border-border">
