@@ -35,22 +35,28 @@ export class WebSocketManager {
 
   connect(): void {
     try {
+      // Connect to WebSocket server on port 8081
       const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-      const wsUrl = `${protocol}//${window.location.hostname}:8080`;
+      const wsUrl = `${protocol}//${window.location.hostname}:8081`;
       
+      console.log("Attempting WebSocket connection to:", wsUrl);
       this.ws = new WebSocket(wsUrl);
 
       this.ws.onopen = () => {
-        console.log("WebSocket connected");
+        console.log("WebSocket connected to:", wsUrl);
         this.reconnectAttempts = 0;
       };
 
       this.ws.onmessage = (event) => {
         try {
           const message: WebSocketMessage = JSON.parse(event.data);
+          console.log("Received WebSocket message:", message);
           const handler = this.messageHandlers.get(message.type);
           if (handler) {
+            console.log("Calling handler for message type:", message.type);
             handler(message);
+          } else {
+            console.log("No handler found for message type:", message.type);
           }
         } catch (error) {
           console.error("Error parsing WebSocket message:", error);

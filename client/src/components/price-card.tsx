@@ -39,10 +39,10 @@ export function PriceCard({ symbol, name, icon, iconColor, data, onClick }: Pric
           </div>
           <div className="text-right">
             <p className="font-bold">
-              ${price.toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-              })}
+              ${price > 1000 
+                ? price.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })
+                : price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 6 })
+              }
             </p>
             <p className={cn(
               "text-sm",
