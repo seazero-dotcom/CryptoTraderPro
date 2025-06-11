@@ -15,7 +15,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       binanceClient = Binance({
         apiKey: credentials.apiKey,
         apiSecret: credentials.apiSecret,
-        useServerTime: true,
       });
       return binanceClient;
     }
@@ -31,7 +30,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const testClient = Binance({
         apiKey: data.apiKey,
         apiSecret: data.apiSecret,
-        useServerTime: true,
       });
       
       await testClient.accountInfo();
@@ -63,7 +61,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const testClient = Binance({
         apiKey,
         apiSecret,
-        useServerTime: true,
       });
       
       await testClient.accountInfo();
@@ -226,7 +223,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     const cleanups: (() => void)[] = [];
     
     streams.forEach(stream => {
-      const cleanup = publicClient.ws.ticker(stream.split('@')[0].toUpperCase(), (ticker) => {
+      const cleanup = publicClient.ws.ticker(stream.split('@')[0].toUpperCase(), (ticker: any) => {
         ws.send(JSON.stringify({
           type: "ticker",
           symbol: ticker.symbol,

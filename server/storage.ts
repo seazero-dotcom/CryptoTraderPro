@@ -101,7 +101,8 @@ export class MemStorage implements IStorage {
     const cred: ApiCredentials = { 
       ...credentials, 
       id, 
-      createdAt: new Date() 
+      createdAt: new Date(),
+      isTestnet: credentials.isTestnet ?? false
     };
     this.apiCredentials.set(id, cred);
     return cred;
@@ -133,7 +134,13 @@ export class MemStorage implements IStorage {
       ...strategy, 
       id,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
+      buyPrice: strategy.buyPrice ?? null,
+      buyAmount: strategy.buyAmount ?? null,
+      sellPrice: strategy.sellPrice ?? null,
+      sellAmount: strategy.sellAmount ?? null,
+      isActive: strategy.isActive ?? false,
+      pnl: strategy.pnl ?? "0"
     };
     this.strategies.set(id, newStrategy);
     return newStrategy;
@@ -174,7 +181,11 @@ export class MemStorage implements IStorage {
     const newOrder: Order = { 
       ...order, 
       id,
-      createdAt: new Date()
+      createdAt: new Date(),
+      strategyId: order.strategyId ?? null,
+      binanceOrderId: order.binanceOrderId ?? null,
+      price: order.price ?? null,
+      executedAt: order.executedAt ?? null
     };
     this.orders.set(id, newOrder);
     return newOrder;
@@ -218,7 +229,9 @@ export class MemStorage implements IStorage {
       const newPortfolio: Portfolio = { 
         ...portfolio, 
         id,
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        free: portfolio.free ?? "0",
+        locked: portfolio.locked ?? "0"
       };
       this.portfolios.set(id, newPortfolio);
       return newPortfolio;
