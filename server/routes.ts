@@ -187,31 +187,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Market data using CoinGecko API
+  // Market data using CryptoCompare API
   app.get("/api/prices", async (req, res) => {
     try {
-      console.log("Fetching real market data from CoinGecko API");
+      console.log("Fetching real market data from CryptoCompare API");
       
-      const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,cardano,solana,polkadot&vs_currencies=usd');
-      const data = await response.json();
+      const cryptoCompareResponse = await fetch('https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,BNB,ADA,SOL,DOT&tsyms=USD');
+      
+      if (!cryptoCompareResponse.ok) {
+        throw new Error(`HTTP error! status: ${cryptoCompareResponse.status}`);
+      }
+      
+      const data = await cryptoCompareResponse.json();
+      console.log("CryptoCompare API response:", data);
       
       // Convert to trading pair format
-      const prices = {
-        BTCUSDT: data.bitcoin.usd.toString(),
-        ETHUSDT: data.ethereum.usd.toString(),
-        BNBUSDT: data.binancecoin.usd.toString(),
-        ADAUSDT: data.cardano.usd.toString(),
-        SOLUSDT: data.solana.usd.toString(),
-        DOTUSDT: data.polkadot.usd.toString()
-      };
+      const prices: { [key: string]: string } = {};
       
-      console.log("Successfully fetched real prices:", prices);
+      if (data.BTC?.USD) prices.BTCUSDT = data.BTC.USD.toString();
+      if (data.ETH?.USD) prices.ETHUSDT = data.ETH.USD.toString();
+      if (data.BNB?.USD) prices.BNBUSDT = data.BNB.USD.toString();
+      if (data.ADA?.USD) prices.ADAUSDT = data.ADA.USD.toString();
+      if (data.SOL?.USD) prices.SOLUSDT = data.SOL.USD.toString();
+      if (data.DOT?.USD) prices.DOTUSDT = data.DOT.USD.toString();
+      
+      console.log("Successfully fetched real prices from CryptoCompare:", prices);
       res.json(prices);
       
     } catch (error: any) {
-      console.error("CoinGecko API Error:", error.message);
+      console.error("CryptoCompare API Error:", error.message);
       res.status(500).json({ 
-        message: "Unable to fetch market data", 
+        message: "Unable to fetch market data from CryptoCompare", 
         error: error.message
       });
     }
