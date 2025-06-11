@@ -14,43 +14,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const initBinanceClient = async (userId: number) => {
     const credentials = await storage.getApiCredentials(userId);
     if (credentials) {
-      // Try Global first, fallback to US if location restricted
-      try {
-        binanceClient = Binance({
-          apiKey: credentials.apiKey,
-          apiSecret: credentials.apiSecret,
-        });
-        
-        // Test the connection with a simple call
-        await binanceClient.accountInfo();
-        console.log("Using Binance Global API");
-        return binanceClient;
-      } catch (error: any) {
-        if (error.message?.includes("restricted location")) {
-          console.log("Binance Global restricted, trying Binance US...");
-          try {
-            binanceClient = Binance({
-              apiKey: credentials.apiKey,
-              apiSecret: credentials.apiSecret,
-              httpBase: 'https://api.binance.us',
-              wsBase: 'wss://stream.binance.us:9443/ws/',
-              httpFutures: 'https://fapi.binance.us',
-              wsFutures: 'wss://fstream.binance.us/ws/'
-            });
-            
-            // Test US connection
-            await binanceClient.accountInfo();
-            console.log("Using Binance US API");
-            return binanceClient;
-          } catch (usError: any) {
-            console.error("Both Binance Global and US failed:", usError.message);
-            return null;
-          }
-        } else {
-          console.error("Binance API error:", error.message);
-          return null;
-        }
-      }
+      binanceClient = Binance({
+        apiKey: credentials.apiKey,
+        apiSecret: credentials.apiSecret,
+      });
+      return binanceClient;
     }
     return null;
   };
@@ -60,33 +28,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const data = insertApiCredentialsSchema.parse(req.body);
       
-      // Test the credentials first - try Global, then US
-      let testClient = Binance({
+      // Test the credentials first
+      const testClient = Binance({
         apiKey: data.apiKey,
         apiSecret: data.apiSecret,
       });
       
-      try {
-        await testClient.accountInfo();
-        console.log("Credentials validated with Binance Global");
-      } catch (globalError: any) {
-        if (globalError.message?.includes("restricted location")) {
-          console.log("Testing credentials with Binance US...");
-          testClient = Binance({
-            apiKey: data.apiKey,
-            apiSecret: data.apiSecret,
-            httpBase: 'https://api.binance.us',
-            wsBase: 'wss://stream.binance.us:9443/ws/',
-            httpFutures: 'https://fapi.binance.us',
-            wsFutures: 'wss://fstream.binance.us/ws/'
-          });
-          
-          await testClient.accountInfo();
-          console.log("Credentials validated with Binance US");
-        } else {
-          throw globalError;
-        }
-      }
+      await testClient.accountInfo();
       
       const credentials = await storage.createApiCredentials(data);
       res.json(credentials);
@@ -116,69 +64,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log("API Key provided:", apiKey ? "***PROVIDED***" : "NO_KEY");
       console.log("API Secret provided:", apiSecret ? "***PROVIDED***" : "NO_SECRET");
       
-      // Try Binance Global first
-      let testClient = Binance({
+      const testClient = Binance({
         apiKey,
         apiSecret,
       });
       
-      try {
-        console.log("Attempting to call Binance Global accountInfo...");
-        const accountInfo = await testClient.accountInfo();
-        console.log("Binance Global API test successful");
-        
-        res.json({ 
-          success: true, 
-          message: "API 연결이 성공했습니다. 바이낸스 글로벌 계정 정보를 확인했습니다.",
-          endpoint: "global" 
-        });
-        return;
-      } catch (globalError: any) {
-        console.log("Binance Global failed:", globalError.message);
-        
-        // If it's a location restriction, try Binance US
-        if (globalError.message?.includes("restricted location")) {
-          console.log("Trying Binance US due to location restriction...");
-          
-          testClient = Binance({
-            apiKey,
-            apiSecret,
-            httpBase: 'https://api.binance.us',
-            wsBase: 'wss://stream.binance.us:9443/ws/',
-            httpFutures: 'https://fapi.binance.us',
-            wsFutures: 'wss://fstream.binance.us/ws/'
-          });
-          
-          try {
-            console.log("Attempting to call Binance US accountInfo...");
-            const accountInfo = await testClient.accountInfo();
-            console.log("Binance US API test successful");
-            
-            res.json({ 
-              success: true, 
-              message: "API 연결이 성공했습니다. 바이낸스 US 계정 정보를 확인했습니다.",
-              endpoint: "us" 
-            });
-            return;
-          } catch (usError: any) {
-            console.log("Binance US also failed:", usError.message);
-            // Continue to error handling below
-            throw usError;
-          }
-        } else {
-          // For other errors (like invalid credentials), don't try US
-          throw globalError;
-        }
-      }
+      console.log("Attempting to call Binance accountInfo...");
+      const accountInfo = await testClient.accountInfo();
+      console.log("Binance API test successful");
+      
+      res.json({ success: true, message: "API 연결이 성공했습니다. 계정 정보를 확인했습니다." });
     } catch (error: any) {
-      console.error("All Binance API tests failed:");
+      console.error("Binance API test failed:");
       console.error("Error message:", error.message);
       console.error("Error details:", error);
       
       // Provide more specific error messages
       let errorMessage = error.message;
       if (error.message?.includes("restricted location")) {
-        errorMessage = "지역 제한으로 인해 바이낸스 글로벌과 바이낸스 US 모두 접근할 수 없습니다. VPN을 사용하거나 다른 지역의 서버를 시도해보세요.";
+        errorMessage = "지역 제한으로 인해 바이낸스 API에 접근할 수 없습니다. API 키는 유효하지만 서버 위치에서 접근이 제한됩니다.";
       } else if (error.message?.includes("Invalid API-key")) {
         errorMessage = "잘못된 API 키입니다. 바이낸스에서 생성한 올바른 API 키를 입력해주세요.";
       } else if (error.message?.includes("Invalid signature")) {
