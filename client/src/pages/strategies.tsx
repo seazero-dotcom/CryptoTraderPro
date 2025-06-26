@@ -73,7 +73,7 @@ export default function Strategies() {
     },
     onError: (error: any) => {
       toast({
-        title: "Error",
+        title: "오류",
         description: error.message,
         variant: "destructive",
       });

@@ -33,8 +33,8 @@ export default function Portfolio() {
       <header className="bg-card border-b border-border p-4 md:p-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl md:text-2xl font-bold">Portfolio</h1>
-            <p className="text-sm text-muted-foreground mt-1">Your cryptocurrency holdings and trading history</p>
+            <h1 className="text-xl md:text-2xl font-bold">포트폴리오</h1>
+            <p className="text-sm text-muted-foreground mt-1">보유 암호화폐 및 거래 내역</p>
           </div>
         </div>
       </header>
@@ -45,23 +45,23 @@ export default function Portfolio() {
           <CardHeader>
             <CardTitle className="flex items-center">
               <Wallet className="h-5 w-5 mr-2" />
-              Portfolio Summary
+              포트폴리오 요약
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center md:text-left">
-                <p className="text-muted-foreground text-sm">Total Portfolio Value</p>
+                <p className="text-muted-foreground text-sm">총 포트폴리오 가치</p>
                 <p className="text-2xl font-bold">
                   ${totalValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </p>
               </div>
               <div className="text-center md:text-left">
-                <p className="text-muted-foreground text-sm">24h Change</p>
+                <p className="text-muted-foreground text-sm">24시간 변화</p>
                 <p className="text-2xl font-bold text-green-500">+$423.12</p>
               </div>
               <div className="text-center md:text-left">
-                <p className="text-muted-foreground text-sm">Total P&L</p>
+                <p className="text-muted-foreground text-sm">총 손익</p>
                 <p className="text-2xl font-bold text-green-500">+$1,234.56</p>
               </div>
             </div>
@@ -71,7 +71,7 @@ export default function Portfolio() {
         {/* Holdings */}
         <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle>Holdings</CardTitle>
+            <CardTitle>보유 자산</CardTitle>
           </CardHeader>
           <CardContent>
             {isLoading ? (
@@ -154,7 +154,7 @@ export default function Portfolio() {
         {/* Recent Orders */}
         <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle>Recent Orders</CardTitle>
+            <CardTitle>최근 주문</CardTitle>
           </CardHeader>
           <CardContent>
             {orders && Array.isArray(orders) && orders.length > 0 ? (

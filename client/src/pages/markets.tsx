@@ -36,8 +36,8 @@ export default function Markets() {
       <header className="bg-card border-b border-border p-4 md:p-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl md:text-2xl font-bold">Markets</h1>
-            <p className="text-sm text-muted-foreground mt-1">Real-time cryptocurrency market data</p>
+            <h1 className="text-xl md:text-2xl font-bold">마켓</h1>
+            <p className="text-sm text-muted-foreground mt-1">실시간 암호화폐 시장 데이터</p>
           </div>
         </div>
       </header>
@@ -47,7 +47,7 @@ export default function Markets() {
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
-            placeholder="Search cryptocurrencies..."
+            placeholder="암호화폐 검색..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
