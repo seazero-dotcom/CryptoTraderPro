@@ -100,8 +100,29 @@ This is a full-stack cryptocurrency trading application built with React, Expres
 ```
 Changelog:
 - June 26, 2025. Initial setup
+- June 26, 2025. Enhanced Korean language support across all pages
+- June 26, 2025. Improved API error handling with fallback systems
+- June 26, 2025. Added comprehensive user guidance for API configuration
 ```
+
+## Recent Changes
+
+### Korean Language Integration (June 26, 2025)
+- Completed Korean translation for all navigation menu items
+- Translated dashboard page headers and statistics labels
+- Updated portfolio page with Korean labels and better error messaging
+- Enhanced markets page with Korean search placeholder and headers
+- Improved settings page with Korean titles and configuration guidance
+- Added Korean error messages for API credential validation
+
+### API Integration Improvements (June 26, 2025)
+- Implemented fallback system from Binance Global to CryptoCompare API
+- Enhanced error logging for API credential testing
+- Added detailed Korean error messages for location restrictions
+- Improved user guidance for API key setup and troubleshooting
 
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+Project language: Korean interface with English technical terms where appropriate.
+API handling: Prefer detailed error messages and user guidance over silent failures.

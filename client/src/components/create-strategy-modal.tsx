@@ -11,12 +11,12 @@ import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 const createStrategyFormSchema = insertStrategySchema.extend({
-  name: z.string().min(1, "Strategy name is required"),
-  symbol: z.string().min(1, "Trading pair is required"),
-  buyPrice: z.string().min(1, "Buy price is required"),
-  buyAmount: z.string().min(1, "Buy amount is required"),
-  sellPrice: z.string().min(1, "Sell price is required"),
-  sellAmount: z.string().min(1, "Sell amount is required"),
+  name: z.string().min(1, "전략 이름을 입력해주세요"),
+  symbol: z.string().min(1, "거래 쌍을 선택해주세요"),
+  buyPrice: z.string().min(1, "매수 가격을 입력해주세요"),
+  buyAmount: z.string().min(1, "매수 수량을 입력해주세요"),
+  sellPrice: z.string().min(1, "매도 가격을 입력해주세요"),
+  sellAmount: z.string().min(1, "매도 수량을 입력해주세요"),
 });
 
 type CreateStrategyFormData = z.infer<typeof createStrategyFormSchema>;
@@ -62,7 +62,7 @@ export function CreateStrategyModal({ open, onOpenChange, onSubmit }: CreateStra
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Create New Strategy</DialogTitle>
+          <DialogTitle>새 전략 생성</DialogTitle>
         </DialogHeader>
         
         <Form {...form}>
@@ -72,9 +72,9 @@ export function CreateStrategyModal({ open, onOpenChange, onSubmit }: CreateStra
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Strategy Name</FormLabel>
+                  <FormLabel>전략 이름</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., BTC DCA Strategy" {...field} />
+                    <Input placeholder="예: BTC DCA 전략" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -86,11 +86,11 @@ export function CreateStrategyModal({ open, onOpenChange, onSubmit }: CreateStra
               name="symbol"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Trading Pair</FormLabel>
+                  <FormLabel>거래 쌍</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select trading pair" />
+                        <SelectValue placeholder="거래 쌍 선택" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>

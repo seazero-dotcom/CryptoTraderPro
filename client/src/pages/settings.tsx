@@ -103,8 +103,8 @@ export default function Settings() {
       {/* Header */}
       <header className="bg-card border-b border-border p-4 md:p-6">
         <div>
-          <h1 className="text-xl md:text-2xl font-bold">Settings</h1>
-          <p className="text-sm text-muted-foreground mt-1">Configure your API credentials and preferences</p>
+          <h1 className="text-xl md:text-2xl font-bold">설정</h1>
+          <p className="text-sm text-muted-foreground mt-1">API 자격 증명 및 환경 설정</p>
         </div>
       </header>
 
@@ -112,7 +112,7 @@ export default function Settings() {
         {/* API Configuration */}
         <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle>Binance API Configuration</CardTitle>
+            <CardTitle>바이낸스 API 설정</CardTitle>
             <Alert className="mt-4">
               <AlertTriangle className="h-4 w-4" />
               <AlertDescription>
