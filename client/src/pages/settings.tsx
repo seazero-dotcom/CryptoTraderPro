@@ -180,6 +180,7 @@ export default function Settings() {
                 id="testnet"
                 checked={isTestnet}
                 onCheckedChange={setIsTestnet}
+                className="bg-[#6193c2]"
               />
               <Label htmlFor="testnet">Use Testnet</Label>
             </div>
