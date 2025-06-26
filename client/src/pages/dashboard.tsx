@@ -47,13 +47,13 @@ export default function Dashboard() {
       <header className="bg-card border-b border-border p-4 md:p-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl md:text-2xl font-bold">Trading Dashboard</h1>
-            <p className="text-sm text-muted-foreground mt-1">Real-time market overview</p>
+            <h1 className="text-xl md:text-2xl font-bold">트레이딩 대시보드</h1>
+            <p className="text-sm text-muted-foreground mt-1">실시간 시장 현황</p>
           </div>
           <div className="flex items-center space-x-2">
             <Button className="bg-green-600 hover:bg-green-700 text-white">
               <Plus className="h-4 w-4 mr-2" />
-              New Strategy
+              새 전략
             </Button>
           </div>
         </div>
@@ -79,7 +79,7 @@ export default function Dashboard() {
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-muted-foreground text-sm">Total Balance</p>
+                  <p className="text-muted-foreground text-sm">총 잔고</p>
                   <p className="text-xl font-bold mt-1">
                     ${totalBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </p>
@@ -97,14 +97,14 @@ export default function Dashboard() {
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-muted-foreground text-sm">P&L Today</p>
+                  <p className="text-muted-foreground text-sm">오늘 손익</p>
                   <p className="text-xl font-bold mt-1 text-green-500">+$284.12</p>
                 </div>
                 <TrendingUp className="text-green-500 text-xl" />
               </div>
               <div className="flex items-center mt-2">
                 <span className="text-green-500 text-xs">+1.87%</span>
-                <span className="text-muted-foreground text-xs ml-1">today</span>
+                <span className="text-muted-foreground text-xs ml-1">오늘</span>
               </div>
             </CardContent>
           </Card>
@@ -113,13 +113,13 @@ export default function Dashboard() {
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-muted-foreground text-sm">Active Strategies</p>
+                  <p className="text-muted-foreground text-sm">활성 전략</p>
                   <p className="text-xl font-bold mt-1">{activeStrategies}</p>
                 </div>
                 <Bot className="text-yellow-500 text-xl" />
               </div>
               <div className="flex items-center mt-2">
-                <span className="text-muted-foreground text-xs">Running</span>
+                <span className="text-muted-foreground text-xs">실행 중</span>
               </div>
             </CardContent>
           </Card>
@@ -128,13 +128,13 @@ export default function Dashboard() {
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-muted-foreground text-sm">Orders Today</p>
+                  <p className="text-muted-foreground text-sm">오늘 주문</p>
                   <p className="text-xl font-bold mt-1">{todayOrders}</p>
                 </div>
                 <ArrowUpDown className="text-primary text-xl" />
               </div>
               <div className="flex items-center mt-2">
-                <span className="text-green-500 text-xs">{Math.floor(todayOrders * 0.78)} filled</span>
+                <span className="text-green-500 text-xs">{Math.floor(todayOrders * 0.78)} 체결</span>
               </div>
             </CardContent>
           </Card>
@@ -143,7 +143,7 @@ export default function Dashboard() {
         {/* Market Overview */}
         <Card className="bg-card border-border overflow-hidden">
           <CardHeader>
-            <CardTitle>Market Overview</CardTitle>
+            <CardTitle>시장 현황</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
