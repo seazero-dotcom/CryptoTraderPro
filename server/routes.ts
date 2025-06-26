@@ -300,8 +300,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   const httpServer = createServer(app);
 
-  // WebSocket server on port 8081 to avoid conflicts with Vite
-  const wss = new WebSocketServer({ port: 8081 });
+  // WebSocket server on the same port as the main server for Replit compatibility
+  const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
   
   wss.on("connection", (ws) => {
     console.log("WebSocket client connected");
