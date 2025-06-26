@@ -38,7 +38,7 @@ export default function Dashboard() {
 
   const totalBalance = portfolio && Array.isArray(portfolio) ? portfolio.reduce((acc: number, item: any) => {
     return acc + (parseFloat(item.free) * (prices.get(item.symbol + "USDT")?.lastPrice ? parseFloat(prices.get(item.symbol + "USDT")!.lastPrice) : 0));
-  }, 0) : 12486.23;
+  }, 0) : 0;
 
   const activeStrategies = strategies && Array.isArray(strategies) ? strategies.filter((s: any) => s.isActive).length : 0;
   const todayOrders = orders && Array.isArray(orders) ? orders.filter((o: any) => {
@@ -87,15 +87,21 @@ export default function Dashboard() {
                 <div>
                   <p className="text-muted-foreground text-sm">총 잔고</p>
                   <p className="text-xl font-bold mt-1">
-                    ${totalBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    {isApiKeyMissing ? (
+                      <span className="text-muted-foreground">API 키 필요</span>
+                    ) : (
+                      `$${totalBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                    )}
                   </p>
                 </div>
                 <Wallet className="text-primary text-xl" />
               </div>
-              <div className="flex items-center mt-2">
-                <span className="text-green-500 text-xs">+2.45%</span>
-                <span className="text-muted-foreground text-xs ml-1">24h</span>
-              </div>
+              {!isApiKeyMissing && (
+                <div className="flex items-center mt-2">
+                  <span className="text-green-500 text-xs">+2.45%</span>
+                  <span className="text-muted-foreground text-xs ml-1">24h</span>
+                </div>
+              )}
             </CardContent>
           </Card>
 
@@ -104,14 +110,22 @@ export default function Dashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-muted-foreground text-sm">오늘 손익</p>
-                  <p className="text-xl font-bold mt-1 text-green-500">+$284.12</p>
+                  <p className="text-xl font-bold mt-1">
+                    {isApiKeyMissing ? (
+                      <span className="text-muted-foreground">API 키 필요</span>
+                    ) : (
+                      <span className="text-green-500">+$0.00</span>
+                    )}
+                  </p>
                 </div>
-                <TrendingUp className="text-green-500 text-xl" />
+                <TrendingUp className={isApiKeyMissing ? "text-muted-foreground" : "text-green-500"} />
               </div>
-              <div className="flex items-center mt-2">
-                <span className="text-green-500 text-xs">+1.87%</span>
-                <span className="text-muted-foreground text-xs ml-1">오늘</span>
-              </div>
+              {!isApiKeyMissing && (
+                <div className="flex items-center mt-2">
+                  <span className="text-green-500 text-xs">+0.00%</span>
+                  <span className="text-muted-foreground text-xs ml-1">오늘</span>
+                </div>
+              )}
             </CardContent>
           </Card>
 

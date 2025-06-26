@@ -1,13 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useWebSocket } from "@/hooks/use-websocket";
-import { Wallet, TrendingUp, TrendingDown } from "lucide-react";
+import { Wallet, TrendingUp, TrendingDown, AlertTriangle } from "lucide-react";
 
 export default function Portfolio() {
   const { prices } = useWebSocket();
 
-  const { data: portfolio, isLoading } = useQuery({
+  const { data: portfolio, isLoading, error: portfolioError } = useQuery({
     queryKey: ["/api/portfolio/1"],
   });
 
@@ -26,6 +27,7 @@ export default function Portfolio() {
   };
 
   const totalValue = calculatePortfolioValue();
+  const isApiKeyMissing = portfolioError && portfolioError.message?.includes("API credentials not configured");
 
   return (
     <div className="pb-16 md:pb-0 md:ml-64">
@@ -40,6 +42,18 @@ export default function Portfolio() {
       </header>
 
       <div className="p-4 md:p-6 space-y-6">
+        {/* API Key Warning */}
+        {isApiKeyMissing && (
+          <Alert className="border-orange-500 bg-orange-50 dark:bg-orange-950">
+            <AlertTriangle className="h-4 w-4 text-orange-600" />
+            <AlertDescription className="text-orange-700 dark:text-orange-300">
+              <span className="font-medium">API 키 설정이 필요합니다.</span> 설정에서 바이낸스 API 키를 추가하여 포트폴리오 데이터를 확인하세요.{" "}
+              <a href="/settings" className="underline hover:no-underline">
+                설정으로 이동
+              </a>
+            </AlertDescription>
+          </Alert>
+        )}
         {/* Portfolio Summary */}
         <Card className="bg-card border-border">
           <CardHeader>
@@ -53,16 +67,32 @@ export default function Portfolio() {
               <div className="text-center md:text-left">
                 <p className="text-muted-foreground text-sm">총 포트폴리오 가치</p>
                 <p className="text-2xl font-bold">
-                  ${totalValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  {isApiKeyMissing ? (
+                    <span className="text-muted-foreground">API 키 필요</span>
+                  ) : (
+                    `$${totalValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                  )}
                 </p>
               </div>
               <div className="text-center md:text-left">
                 <p className="text-muted-foreground text-sm">24시간 변화</p>
-                <p className="text-2xl font-bold text-green-500">+$423.12</p>
+                <p className="text-2xl font-bold">
+                  {isApiKeyMissing ? (
+                    <span className="text-muted-foreground">API 키 필요</span>
+                  ) : (
+                    <span className="text-green-500">+$0.00</span>
+                  )}
+                </p>
               </div>
               <div className="text-center md:text-left">
                 <p className="text-muted-foreground text-sm">총 손익</p>
-                <p className="text-2xl font-bold text-green-500">+$1,234.56</p>
+                <p className="text-2xl font-bold">
+                  {isApiKeyMissing ? (
+                    <span className="text-muted-foreground">API 키 필요</span>
+                  ) : (
+                    <span className="text-green-500">+$0.00</span>
+                  )}
+                </p>
               </div>
             </div>
           </CardContent>
