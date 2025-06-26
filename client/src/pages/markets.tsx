@@ -70,9 +70,48 @@ export default function Markets() {
 
         {filteredCoins.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-muted-foreground">No cryptocurrencies found matching your search.</p>
+            <p className="text-muted-foreground">검색 조건과 일치하는 암호화폐가 없습니다.</p>
           </div>
         )}
+        
+        {/* Market Statistics */}
+        <Card className="bg-card border-border mt-6">
+          <CardHeader>
+            <CardTitle>시장 통계</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center p-4 bg-muted/30 rounded-lg">
+                <p className="text-muted-foreground text-sm">상승 코인</p>
+                <p className="text-xl font-bold text-green-500">
+                  {Array.from(prices.values()).filter(price => 
+                    parseFloat(price.priceChangePercent || "0") > 0
+                  ).length}
+                </p>
+              </div>
+              <div className="text-center p-4 bg-muted/30 rounded-lg">
+                <p className="text-muted-foreground text-sm">하락 코인</p>
+                <p className="text-xl font-bold text-red-500">
+                  {Array.from(prices.values()).filter(price => 
+                    parseFloat(price.priceChangePercent || "0") < 0
+                  ).length}
+                </p>
+              </div>
+              <div className="text-center p-4 bg-muted/30 rounded-lg">
+                <p className="text-muted-foreground text-sm">변동 없음</p>
+                <p className="text-xl font-bold text-muted-foreground">
+                  {Array.from(prices.values()).filter(price => 
+                    parseFloat(price.priceChangePercent || "0") === 0
+                  ).length}
+                </p>
+              </div>
+              <div className="text-center p-4 bg-muted/30 rounded-lg">
+                <p className="text-muted-foreground text-sm">총 코인</p>
+                <p className="text-xl font-bold">{allCoins.length}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

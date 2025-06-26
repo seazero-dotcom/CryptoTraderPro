@@ -309,14 +309,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     // Use CryptoCompare API for real-time updates since Binance is geo-blocked
     const sendRealTimePrices = async () => {
       try {
-        const response = await fetch('https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,BNB&tsyms=USD');
+        const response = await fetch('https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,BNB,ADA,SOL,DOT,MATIC,AVAX,LINK&tsyms=USD');
         const data = await response.json();
         
         // Send price updates for each symbol
         const symbols = [
           { crypto: 'BTC', symbol: 'BTCUSDT' },
           { crypto: 'ETH', symbol: 'ETHUSDT' },
-          { crypto: 'BNB', symbol: 'BNBUSDT' }
+          { crypto: 'BNB', symbol: 'BNBUSDT' },
+          { crypto: 'ADA', symbol: 'ADAUSDT' },
+          { crypto: 'SOL', symbol: 'SOLUSDT' },
+          { crypto: 'DOT', symbol: 'DOTUSDT' },
+          { crypto: 'MATIC', symbol: 'MATICUSDT' },
+          { crypto: 'AVAX', symbol: 'AVAXUSDT' },
+          { crypto: 'LINK', symbol: 'LINKUSDT' }
         ];
         
         symbols.forEach(({ crypto, symbol }) => {

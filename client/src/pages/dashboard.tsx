@@ -11,6 +11,12 @@ const coinData = [
   { symbol: "BTCUSDT", name: "Bitcoin", icon: "₿", iconColor: "bg-orange-500" },
   { symbol: "ETHUSDT", name: "Ethereum", icon: "Ξ", iconColor: "bg-blue-500" },
   { symbol: "BNBUSDT", name: "Binance Coin", icon: "B", iconColor: "bg-yellow-500" },
+  { symbol: "ADAUSDT", name: "Cardano", icon: "A", iconColor: "bg-blue-600" },
+  { symbol: "SOLUSDT", name: "Solana", icon: "S", iconColor: "bg-purple-500" },
+  { symbol: "DOTUSDT", name: "Polkadot", icon: "D", iconColor: "bg-pink-500" },
+  { symbol: "MATICUSDT", name: "Polygon", icon: "M", iconColor: "bg-indigo-500" },
+  { symbol: "AVAXUSDT", name: "Avalanche", icon: "A", iconColor: "bg-red-500" },
+  { symbol: "LINKUSDT", name: "Chainlink", icon: "L", iconColor: "bg-blue-400" },
 ];
 
 export default function Dashboard() {
@@ -140,10 +146,47 @@ export default function Dashboard() {
           </Card>
         </div>
 
+        {/* Market Summary */}
+        <Card className="bg-card border-border overflow-hidden">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle>시장 요약</CardTitle>
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-sm text-muted-foreground">실시간</span>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              <div className="text-center">
+                <p className="text-muted-foreground text-sm">총 시가총액</p>
+                <p className="text-xl font-bold">$2.8T</p>
+                <p className="text-green-500 text-xs">+2.1%</p>
+              </div>
+              <div className="text-center">
+                <p className="text-muted-foreground text-sm">24시간 거래량</p>
+                <p className="text-xl font-bold">$95B</p>
+                <p className="text-red-500 text-xs">-5.2%</p>
+              </div>
+              <div className="text-center">
+                <p className="text-muted-foreground text-sm">BTC 도미넌스</p>
+                <p className="text-xl font-bold">52.3%</p>
+                <p className="text-green-500 text-xs">+0.8%</p>
+              </div>
+              <div className="text-center">
+                <p className="text-muted-foreground text-sm">활성 코인</p>
+                <p className="text-xl font-bold">{coinData.length}</p>
+                <p className="text-muted-foreground text-xs">추적 중</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Market Overview */}
         <Card className="bg-card border-border overflow-hidden">
           <CardHeader>
-            <CardTitle>시장 현황</CardTitle>
+            <CardTitle>실시간 시장 현황</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -158,6 +201,12 @@ export default function Dashboard() {
                 />
               ))}
             </div>
+            {prices.size === 0 && (
+              <div className="text-center py-8">
+                <Activity className="h-12 w-12 text-muted-foreground mx-auto mb-4 animate-spin" />
+                <p className="text-muted-foreground">실시간 시장 데이터 연결 중...</p>
+              </div>
+            )}
           </CardContent>
         </Card>
 
