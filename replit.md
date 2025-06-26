@@ -103,6 +103,8 @@ Changelog:
 - June 26, 2025. Enhanced Korean language support across all pages
 - June 26, 2025. Improved API error handling with fallback systems
 - June 26, 2025. Added comprehensive user guidance for API configuration
+- June 26, 2025. Fixed portfolio display to show "API 키 필요" instead of fake data when API not connected
+- June 26, 2025. WebSocket real-time data confirmed working properly
 ```
 
 ## Recent Changes

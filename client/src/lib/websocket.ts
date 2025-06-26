@@ -50,18 +50,12 @@ export class WebSocketManager {
       this.ws.onmessage = (event) => {
         try {
           const message: WebSocketMessage = JSON.parse(event.data);
-          console.log("Received WebSocket message:", message);
-          console.log("Message data:", message.data);
           const handler = this.messageHandlers.get(message.type);
           if (handler) {
-            console.log("Calling handler for message type:", message.type, "with data:", message.data);
             handler(message);
-          } else {
-            console.log("No handler found for message type:", message.type);
-            console.log("Available handlers:", Array.from(this.messageHandlers.keys()));
           }
         } catch (error) {
-          console.error("Error parsing WebSocket message:", error, "Raw data:", event.data);
+          console.error("Error parsing WebSocket message:", error);
         }
       };
 
