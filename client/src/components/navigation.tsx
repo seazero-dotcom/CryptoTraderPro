@@ -9,11 +9,11 @@ import {
 } from "lucide-react";
 
 const navigation = [
-  { name: "Dashboard", href: "/", icon: TrendingUp },
-  { name: "Markets", href: "/markets", icon: BarChart3 },
-  { name: "Strategies", href: "/strategies", icon: Bot },
-  { name: "Portfolio", href: "/portfolio", icon: Wallet },
-  { name: "Settings", href: "/settings", icon: Settings },
+  { name: "대시보드", href: "/", icon: TrendingUp },
+  { name: "마켓", href: "/markets", icon: BarChart3 },
+  { name: "전략", href: "/strategies", icon: Bot },
+  { name: "포트폴리오", href: "/portfolio", icon: Wallet },
+  { name: "설정", href: "/settings", icon: Settings },
 ];
 
 export function Navigation() {
@@ -25,7 +25,7 @@ export function Navigation() {
         {/* Desktop Logo */}
         <div className="hidden md:flex items-center px-6 py-4 border-b border-border">
           <TrendingUp className="text-primary text-xl mr-3" />
-          <span className="font-bold text-lg">Binance Trader</span>
+          <span className="font-bold text-lg">바이낸스 트레이더</span>
         </div>
         
         {/* Navigation Items */}

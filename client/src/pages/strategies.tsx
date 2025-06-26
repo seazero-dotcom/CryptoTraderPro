@@ -25,13 +25,13 @@ export default function Strategies() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/strategies/1"] });
       toast({
-        title: "Success",
-        description: "Strategy created successfully",
+        title: "성공",
+        description: "전략이 성공적으로 생성되었습니다",
       });
     },
     onError: (error: any) => {
       toast({
-        title: "Error",
+        title: "오류",
         description: error.message,
         variant: "destructive",
       });
@@ -46,13 +46,13 @@ export default function Strategies() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/strategies/1"] });
       toast({
-        title: "Success",
-        description: "Strategy updated successfully",
+        title: "성공",
+        description: "전략이 성공적으로 수정되었습니다",
       });
     },
     onError: (error: any) => {
       toast({
-        title: "Error",
+        title: "오류",
         description: error.message,
         variant: "destructive",
       });
@@ -67,8 +67,8 @@ export default function Strategies() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/strategies/1"] });
       toast({
-        title: "Success",
-        description: "Strategy deleted successfully",
+        title: "성공",
+        description: "전략이 성공적으로 삭제되었습니다",
       });
     },
     onError: (error: any) => {
