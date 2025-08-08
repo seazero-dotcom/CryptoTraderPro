@@ -109,6 +109,14 @@ Changelog:
 
 ## Recent Changes
 
+### Java Spring Boot Migration (August 8, 2025)
+- Created complete Java Spring Boot application structure in `java-app/` directory
+- Implemented core entities (User, TradingStrategy, Order) with JPA annotations
+- Built comprehensive REST API controllers for market data and user management
+- Added WebSocket support for real-time trading data in Java environment
+- Configured Maven build system with proper dependencies (Spring Boot, PostgreSQL, OkHttp)
+- Maintained parallel TypeScript application for immediate functionality
+
 ### Korean Language Integration (June 26, 2025)
 - Completed Korean translation for all navigation menu items
 - Translated dashboard page headers and statistics labels
